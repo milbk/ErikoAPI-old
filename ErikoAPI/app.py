@@ -7,13 +7,9 @@ wsgi_app = app.wsgi_app
 @app.route('/ping/<ip>')
 def ping(ip):
     import os
-    out = os.popen('ping ' + ip).readlines()
-    str = out[8]
-    try:
-        str += out[10]
-    except:
-        pass
-    return str
+    out = os.popen('psping -n 8 -w 2 ' + ip).readlines()
+    line = out[len(out) - 2] + out[len(out) - 1]
+    return line
 
 @app.route('/')
 def index():
