@@ -11,6 +11,13 @@ def ping(ip):
     line = out[len(out) - 2] + out[len(out) - 1]
     return line
 
+@app.route('/tcping/<ip>:<port>')
+def tcping(ip,port):
+    import os
+    out = os.popen('psping -n 8 -w 2 ' + ip + ':' +port).readlines()
+    line = out[len(out) - 2] + out[len(out) - 1]
+    return line
+
 @app.route('/')
 def index():
     return "Eriko API"
