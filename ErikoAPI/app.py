@@ -7,7 +7,11 @@ wsgi_app = app.wsgi_app
 @app.route('/ping/<ip>')
 def ping(ip):
     import os
-    out = os.popen('psping -n 8 -w 2 ' + ip).readlines()
+    import platform
+    if platform.system() == 'Windows':
+        out = os.popen('psping -n 8 -w 2 ' + ip).readlines()
+    else:
+        out = os.popen('ping -w 8 ' + ip).readlines()
     line = out[len(out) - 2] + out[len(out) - 1]
     return line
 
@@ -23,8 +27,10 @@ def index():
     return "Eriko API"
 
 if __name__ == '__main__':
+    print('Eriko Network API')
+    print('Running')
     import os
-    HOST = os.environ.get('SERVER_HOST', 'localhost')
+    HOST = os.environ.get('SERVER_HOST', '0.0.0.0')
     try:
         PORT = int(os.environ.get('SERVER_PORT', '5555'))
     except ValueError:
