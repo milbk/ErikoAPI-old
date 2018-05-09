@@ -12,14 +12,20 @@ def ping(ip):
         out = os.popen('psping -n 8 -w 2 ' + ip).readlines()
     else:
         out = os.popen('ping -w 8 ' + ip).readlines()
+
     line = out[len(out) - 2] + out[len(out) - 1]
     return line
 
 @app.route('/tcping/<ip>:<port>')
 def tcping(ip,port):
     import os
-    out = os.popen('psping -n 8 -w 2 ' + ip + ':' +port).readlines()
-    line = out[len(out) - 2] + out[len(out) - 1]
+    import platform
+    if platform.system() == 'Windows':
+        out = os.popen('psping -n 8 -w 2 ' + ip + ':' + port).readlines()
+        line = out[len(out) - 2] + out[len(out) - 1]
+    else:
+        out = os.popen('tcping -x 8 -C ' + ip + ' ' + port).readlines()
+        line = out[len(out) - 1]
     return line
 
 @app.route('/')
