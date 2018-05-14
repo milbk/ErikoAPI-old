@@ -30,12 +30,7 @@ def tcping(ip,port):
 
 @app.route('/')
 def index():
-    return 'Eriko API'
-
-@app.route('/myip')
-def myip():
-    from flask import request
-    return request.remote_addr
+    return "Eriko API"
 
 if __name__ == '__main__':
     print('Eriko Network API')
